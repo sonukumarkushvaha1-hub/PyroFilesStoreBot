@@ -39,8 +39,7 @@ Bot = Client(
     bot_token=Config.BOT_TOKEN,
     api_id=Config.API_ID,
     api_hash=Config.API_HASH,
-    sleep_threshold=30  # Adds a buffer for floodwaits and sync issues
-)
+    sleep_threshold=30  # Helps with the BadMsgNotification [16] time sync error
 )
 
 @Bot.on_message(filters.private)
@@ -100,7 +99,7 @@ async def start(bot: Client, cmd: Message):
 
 @Bot.on_message((filters.document | filters.video | filters.audio) & ~filters.chat(Config.DB_CHANNEL))
 async def main(bot: Client, message: Message):
-    # Standard string comparison for v1.4.16 compatibility
+    # Using strings instead of enums for v1.4.16 compatibility
     if message.chat.type == "private":
         await add_user_to_database(bot, message)
         if Config.UPDATES_CHANNEL is not None:
@@ -147,6 +146,6 @@ async def main(bot: Client, message: Message):
         except Exception as err:
             await bot.leave_chat(message.chat.id)
 
-# ... [Remaining handlers stay the same as they don't use the 'enums' module] ...
+# ... Handlers for ban, unban, and broadcast would follow here ...
 
 Bot.run()
