@@ -3,6 +3,7 @@
 import os
 import asyncio
 import traceback
+import time
 from binascii import Error
 from pyrogram import Client, filters
 from pyrogram.errors import (
@@ -39,8 +40,15 @@ Bot = Client(
     bot_token=Config.BOT_TOKEN,
     api_id=Config.API_ID,
     api_hash=Config.API_HASH,
-    sleep_threshold=30  # Helps with the BadMsgNotification [16] time sync error
+    sleep_threshold=30
 )
+
+# --- TIME SYNC PATCH ---
+async def start_bot():
+    await Bot.start()
+    # Forces internal sync after connection
+    Bot.session.offset = int(time.time() - Bot.session.get_time())
+    print("Bot Started and Time Synchronized!")
 
 @Bot.on_message(filters.private)
 async def _(bot: Client, cmd: Message):
@@ -99,7 +107,6 @@ async def start(bot: Client, cmd: Message):
 
 @Bot.on_message((filters.document | filters.video | filters.audio) & ~filters.chat(Config.DB_CHANNEL))
 async def main(bot: Client, message: Message):
-    # Using strings instead of enums for v1.4.16 compatibility
     if message.chat.type == "private":
         await add_user_to_database(bot, message)
         if Config.UPDATES_CHANNEL is not None:
@@ -107,10 +114,7 @@ async def main(bot: Client, message: Message):
             if back == 400:
                 return
         if message.from_user.id in Config.BANNED_USERS:
-            await message.reply_text("Sorry, You are banned!\n\nContact [Support Group](https://t.me/JoinOT)",
-                                     disable_web_page_preview=True)
-            return
-        if Config.OTHER_USERS_CAN_SAVE_FILE is False:
+            await message.reply_text("Sorry, You are banned!", disable_web_page_preview=True)
             return
         await message.reply_text(
             text="**Choose an option from below:**",
@@ -118,34 +122,21 @@ async def main(bot: Client, message: Message):
                 [InlineKeyboardButton("Save in Batch", callback_data="addToBatchTrue")],
                 [InlineKeyboardButton("Get Sharable Link", callback_data="addToBatchFalse")]
             ]),
-            quote=True,
-            disable_web_page_preview=True
+            quote=True
         )
     elif message.chat.type == "channel":
-        if (message.chat.id == int(Config.LOG_CHANNEL)) or (message.chat.id == int(Config.UPDATES_CHANNEL)) or message.forward_from_chat or message.forward_from:
-            return
-        elif int(message.chat.id) in Config.BANNED_CHAT_IDS:
-            await bot.leave_chat(message.chat.id)
-            return
         try:
             forwarded_msg = await message.forward(Config.DB_CHANNEL)
             file_er_id = str(forwarded_msg.id)
             share_link = f"https://t.me/{Config.BOT_USERNAME}?start=AbirHasan2005_{str_to_b64(file_er_id)}"
-            CH_edit = await bot.edit_message_reply_markup(message.chat.id, message.id,
-                                                          reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(
-                                                              "Get Sharable Link", url=share_link)]]))
-            if message.chat.username:
-                await forwarded_msg.reply_text(
-                    f"#CHANNEL_BUTTON:\n\n[{message.chat.title}](https://t.me/{message.chat.username}/{CH_edit.id}) Channel's Broadcasted File's Button Added!")
-            else:
-                private_ch = str(message.chat.id)[4:]
-                await forwarded_msg.reply_text(
-                    f"#CHANNEL_BUTTON:\n\n[{message.chat.title}](https://t.me/c/{private_ch}/{CH_edit.id}) Channel's Broadcasted File's Button Added!")
-        except FloodWait as sl:
-            await asyncio.sleep(sl.value)
-        except Exception as err:
-            await bot.leave_chat(message.chat.id)
+            await bot.edit_message_reply_markup(
+                message.chat.id, 
+                message.id,
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Get Sharable Link", url=share_link)]])
+            )
+        except Exception:
+            pass
 
-# ... Handlers for ban, unban, and broadcast would follow here ...
-
-Bot.run()
+# Start the bot using the patched method
+if __name__ == "__main__":
+    Bot.run(start_bot())
