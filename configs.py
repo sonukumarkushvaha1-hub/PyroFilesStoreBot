@@ -7,8 +7,8 @@ class Config(object):
     API_HASH = os.environ.get("API_HASH", "410d526521ae7dcc474e0f4246788560")
     
     # Bot Credentials -
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "5963477340:AAETOE2Y5BrTqQ25kVp4ERiCNHs3ygR2w6w")
-    BOT_USERNAME = os.environ.get("BOT_USERNAME", "Hinmabot") # यहाँ से @ हटा दिया है
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "6592940928:AAGL1ctYGLxbV4adD30XkcGmyU2RK5_6ERM")
+    BOT_USERNAME = os.environ.get("BOT_USERNAME", "Itadomobot") # यहाँ से @ हटा दिया है
     BOT_OWNER = int(os.environ.get("BOT_OWNER", "5569039254")) # आपकी Owner ID
     
     # Database Settings -
