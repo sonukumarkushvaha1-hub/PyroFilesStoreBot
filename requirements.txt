@@ -1,5 +1,3 @@
-pyrogram==1.4.16
+hydrogram
 tgcrypto
 motor
-aiofiles
-dnspython
