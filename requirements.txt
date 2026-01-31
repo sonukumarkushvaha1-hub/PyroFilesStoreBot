@@ -1,4 +1,4 @@
-pyrogram --upgrade
+pyrogram>=2.0.0
 tgcrypto
 motor
 aiofiles
