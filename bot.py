@@ -35,10 +35,12 @@ from handlers.save_media import (
 MediaList = {}
 
 Bot = Client(
-    session_name=Config.BOT_USERNAME, # Changed 'name' to 'session_name' for v1 compatibility
+    session_name=Config.BOT_USERNAME,
     bot_token=Config.BOT_TOKEN,
     api_id=Config.API_ID,
-    api_hash=Config.API_HASH
+    api_hash=Config.API_HASH,
+    sleep_threshold=30  # Adds a buffer for floodwaits and sync issues
+)
 )
 
 @Bot.on_message(filters.private)
