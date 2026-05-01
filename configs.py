@@ -2,8 +2,8 @@ import os
 
 class Config(object):
     # 1. API Credentials (my.telegram.org se)
-    API_ID = int(os.environ.get("API_ID", "0"))
-    API_HASH = os.environ.get("API_HASH", "")
+    API_ID = int(os.environ.get("API_ID", "32460404"))
+    API_HASH = os.environ.get("API_HASH", "410d526521ae7dcc474e0f4246788560")
     
     # 2. Bot Credentials (@BotFather se)
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
