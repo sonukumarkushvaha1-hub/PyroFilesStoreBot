@@ -1,12 +1,45 @@
 import os
 
 class Config(object):
-    API_ID = int(os.environ.get("API_ID", 0))
+    # 1. API Credentials (my.telegram.org se)
+    API_ID = int(os.environ.get("API_ID", "0"))
     API_HASH = os.environ.get("API_HASH", "")
+    
+    # 2. Bot Credentials (@BotFather se)
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
     BOT_USERNAME = os.environ.get("BOT_USERNAME", "hdsssssa_bot")
-    DB_CHANNEL = int(os.environ.get("DB_CHANNEL", -1003789755565))
-    BOT_OWNER = int(os.environ.get("BOT_OWNER", 5569039254))
-    DATABASE_URL = os.environ.get("DATABASE_URL", "")
+    # Aapki Telegram User ID (Numeric)
+    BOT_OWNER = int(os.environ.get("BOT_OWNER", "5569039254"))
+    
+    # 3. Database Settings (MongoDB)
+    # Aapka naya clean URL jo aapne bheja tha
+    DATABASE_URL = os.environ.get("DATABASE_URL", "mongodb+srv://sonukumarkushvaha1_db_user:Hwsb4hIkZ71eeApp@cluster0.2eu5lot.mongodb.net/?appName=Cluster0")
+    # Storage Channel ID (Jahan files save hongi)
+    DB_CHANNEL = int(os.environ.get("DB_CHANNEL", "-1003789755565"))
+    # Database ka naam (Optional)
+    DB_NAME = os.environ.get("DB_NAME", "TheFilmClub_DB")
+    
+    # 4. Force Subscribe Settings
+    # The Film Club Channel ID
     UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", "-1003544601199")
-    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", -1003789755565))
+    # Log Channel ID (Aap apni ya DB channel ki ID daal sakte hain)
+    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "-1003789755565"))
+    
+    # 5. UI/UX & Logic Settings
+    FORWARD_AS_COPY = True
+    BROADCAST_AS_COPY = True
+    # Banned users ki list (Khali rakhein abhi)
+    BANNED_USERS = set(int(x) for x in os.environ.get("BANNED_USERS", "").split() if x.isdigit())
+    
+    # 6. Customizable Texts
+    HOME_TEXT = """
+Hi [{}](tg://user?id={})
+
+Main **The Film Club** ka official File Store Bot hoon.
+Mujhe koi bhi file bhejein, main uska permanent link bana dunga.
+
+**Main Features:**
+* Permanent Link Generation
+* Force Subscribe Enabled
+* High-Speed File Sharing
+"""
