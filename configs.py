@@ -23,7 +23,7 @@ class Config(object):
     # The Film Club Channel ID
     UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", "-1003544601199")
     # Log Channel ID (Aap apni ya DB channel ki ID daal sakte hain)
-    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "-1003789755565"))
+    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "-1003626737474"))
     
     # 5. UI/UX & Logic Settings
     FORWARD_AS_COPY = True
