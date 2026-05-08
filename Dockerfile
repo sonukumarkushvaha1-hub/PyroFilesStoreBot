@@ -1,24 +1,25 @@
-# Use a modern Python base image with active repositories
-FROM python:3.10-slim-bullseye
+# 1. Base image: Python 3.10 slim version use kar rahe hain taaki image size chota rahe
+FROM python:3.10-slim-buster
 
-# Set the working directory inside the container
+# 2. Working directory set karein
 WORKDIR /app
 
-# Install system dependencies
-# Bullseye repositories are stable, so apt-get update will pass
+# 3. System dependencies install karein (Tgcrypto aur network tools ke liye zaroori hain)
 RUN apt-get update && apt-get install -y \
-    git \
     build-essential \
+    libffi-dev \
+    libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy your requirements file first to leverage Docker's build cache
+# 4. requirements.txt copy karein aur install karein
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Copy the rest of your application code into the container
+# 5. Baaki saara code copy karein
 COPY . .
 
-# Specify the command to run your bot
+# 6. Port expose karein (Render ka default 8080 hai)
+EXPOSE 8080
+
+# 7. Bot ko run karne ki command
 CMD ["python3", "bot.py"]
