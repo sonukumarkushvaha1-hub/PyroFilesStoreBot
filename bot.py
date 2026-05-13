@@ -13,7 +13,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 class Config:
     API_ID = int(os.environ.get("API_ID", "24193557"))
     API_HASH = os.environ.get("API_HASH", "750435b0d0c64c7406a6401037560da8")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+    BOT_TOKEN = "8583460812:AAFg5QveoCDIzUhxytPQzgSpGfBDhGhw9s8"
     DB_CHANNEL = int(os.environ.get("DB_CHANNEL", "-1002394567890"))
     BOT_USERNAME = os.environ.get("BOT_USERNAME", "TheFilmClubBot")
     MONGODB_URI = os.environ.get("MONGODB_URI", "")
